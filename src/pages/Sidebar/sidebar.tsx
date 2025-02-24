@@ -9,6 +9,7 @@ import {
   IoFileTrayStacked,
   
 } from "react-icons/io5";
+import Logout from "../../Components/logout"
 
 const Sidebar: React.FC = () => {
   return (
@@ -52,15 +53,9 @@ const Sidebar: React.FC = () => {
 
       {/* Bottom Navigation Section */}
       <nav className="flex flex-col justify-end mb-5">
-        <SidebarOption
-          label="profile"
-          subChildren={
-            <div className="overflow-hidden rounded-full">
-            </div>
-          }
-        >
-          <IoPerson className="text-2xl leading-none" />
-        </SidebarOption>
+          <div>
+            <Logout/>
+          </div>
       </nav>
     </div>
   );

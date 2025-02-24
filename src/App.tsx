@@ -9,7 +9,6 @@ import {
 import Login from "./pages/Login/login";
 import Sidebar from "./pages/Sidebar/sidebar";
 import Logspage from './pages/Logs/logsPage';
-import SearchForm from './Components/searchform';
 import ProtectedRoute from './Components/protectedRoute'; 
 import Dashboard from "./pages/Dashboard/dashboard"
 
@@ -18,7 +17,6 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<Login />} />
       <Route path="/sidebar" element={<Sidebar />} />
-      <Route path="/search" element={<SearchForm />} />
       <Route path="/dashboard" element={<Dashboard />} />
       
       {/* Protected Routes */}

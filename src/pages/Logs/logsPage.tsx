@@ -1,4 +1,3 @@
-// src/pages/Logs/logsPage.tsx sadsa
 import React, { useEffect, useState } from "react";
 import Sidebar from "../Sidebar/sidebar";
 import SearchForm from "../../Components/searchform";
@@ -6,16 +5,17 @@ import Logs from "../Logs/logs";
 import Add from "../../Components/add";
 import Update from "../../Components/update";
 import Delete from "../../Components/delete";
-import { fetchRecords, addRecord, deleteRecord, updateRecord, BorrowRecord } from "../../firebaseServices"; // Import from firebaseService
-import { toast, Toaster } from "react-hot-toast"; // For notifications
-import { ClipLoader } from "react-spinners"; // For loading spinner
-
+import { fetchRecords, addRecord, deleteRecord, updateRecord, BorrowRecord } from "../../firebaseServices"; 
+import { toast, Toaster } from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
 
 const LogsPage: React.FC = () => {
   const [borrowRecords, setBorrowRecords] = useState<BorrowRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRecord, setSelectedRecord] = useState<BorrowRecord | null>(null);
   const [deleteRecordId, setDeleteRecordId] = useState<string | null>(null);
+  const [filteredRecords, setFilteredRecords] = useState<BorrowRecord[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string>(""); // State for status filter
 
   // Fetch data from Firestore
   useEffect(() => {
@@ -23,6 +23,7 @@ const LogsPage: React.FC = () => {
       try {
         const records = await fetchRecords();
         setBorrowRecords(records);
+        setFilteredRecords(records); // Initialize filtered records
       } catch (error) {
         toast.error("Failed to fetch data");
       } finally {
@@ -43,6 +44,25 @@ const LogsPage: React.FC = () => {
     } catch (error) {
       console.error("Error updating record:", error);
       toast.error("Failed to update record");
+    }
+  };
+
+  // Handle search
+  const handleSearch = (searchTerm: string) => {
+    const filtered = borrowRecords.filter((record) =>
+      record.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredRecords(filtered);
+  };
+
+  // Handle status filter
+  const handleStatusFilter = (status: string) => {
+    setStatusFilter(status);
+    if (status === "") {
+      setFilteredRecords(borrowRecords); // Reset filter if no status is selected
+    } else {
+      const filtered = borrowRecords.filter((record) => record.status === status);
+      setFilteredRecords(filtered);
     }
   };
 
@@ -76,7 +96,7 @@ const LogsPage: React.FC = () => {
               alt="Logo"
               className="h-10 w-auto mr-4"
             />
-            <SearchForm />
+            <SearchForm onSearch={handleSearch} onStatusFilter={handleStatusFilter} />
           </div>
 
           {/* Add New Entry Button */}
@@ -91,7 +111,7 @@ const LogsPage: React.FC = () => {
         ) : (
           /* Logs Table */
           <Logs
-            borrowRecords={borrowRecords}
+            borrowRecords={filteredRecords.length > 0 ? filteredRecords : borrowRecords}
             onEdit={(record) => setSelectedRecord(record)}
             onDelete={(id) => setDeleteRecordId(id)}
           />
