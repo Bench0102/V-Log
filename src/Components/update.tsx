@@ -1,5 +1,5 @@
 // src/Components/update.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BorrowRecord } from "../firebaseServices"; // Import from firebaseService
 
 interface UpdateProps {
@@ -10,6 +10,14 @@ interface UpdateProps {
 
 const Update: React.FC<UpdateProps> = ({ record, onUpdate, onClose }) => {
   const [formData, setFormData] = useState<BorrowRecord>(record);
+
+  // Automatically set dateReturned to today's date when status is changed to "Returned"
+  useEffect(() => {
+    if (formData.status === "Returned") {
+      const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+      setFormData((prev) => ({ ...prev, dateReturned: today }));
+    }
+  }, [formData.status]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +30,7 @@ const Update: React.FC<UpdateProps> = ({ record, onUpdate, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm">
+    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-xl font-semibold mb-4">Update Entry</h2>
         <form onSubmit={handleSubmit} className="space-y-3">
@@ -64,7 +72,7 @@ const Update: React.FC<UpdateProps> = ({ record, onUpdate, onClose }) => {
               className="w-2/3 p-1 border border-gray-300 rounded-lg"
               value={formData.status}
               onChange={(e) =>
-                setFormData({ ...formData, status: e.target.value as "Borrowed" | "Overdue" | "returned" }) // Fix type mismatch
+                setFormData({ ...formData, status: e.target.value as "Borrowed" | "Overdue" | "Returned" })
               }
               required
             >
@@ -72,6 +80,19 @@ const Update: React.FC<UpdateProps> = ({ record, onUpdate, onClose }) => {
               <option value="Overdue">Overdue</option>
               <option value="Returned">Returned</option>
             </select>
+          </div>
+
+          {/* Date Returned Field (Read-only if status is Returned) */}
+          <div className="flex justify-between">
+            <label className="font-medium">Date Returned:</label>
+            <input
+              type="date"
+              className="w-2/3 p-1 border border-gray-300 rounded-lg"
+              value={formData.dateReturned || ""}
+              onChange={(e) => setFormData({ ...formData, dateReturned: e.target.value })}
+              disabled={formData.status === "Returned"} // Disable if status is Returned
+              required={formData.status === "Returned"} // Required if status is Returned
+            />
           </div>
 
           {/* Buttons */}
