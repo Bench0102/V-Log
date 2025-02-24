@@ -1,4 +1,4 @@
-// src/Components/logs.tsx
+// src/Components/logs.tsxasdasd
 import React from "react";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { BorrowRecord } from "../../firebaseServices"; // Import the interface
