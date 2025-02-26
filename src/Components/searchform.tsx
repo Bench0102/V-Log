@@ -32,7 +32,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onStatusFilter }) => 
         <button
           id="dropdown-button"
           onClick={toggleDropdown}
-          className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100"
+          className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-green-300 focus:ring-4 focus:outline-none focus:ring-gray-100"
           type="button"
         >
           {selectedStatus || "Status"}
@@ -67,7 +67,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onStatusFilter }) => 
                 <button
                   type="button"
                   onClick={() => handleStatusSelect("Borrowed")}
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100"
+                  className="inline-flex w-full px-4 py-2 hover:bg-green-300"
                 >
                   Borrowed
                 </button>
@@ -76,7 +76,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onStatusFilter }) => 
                 <button
                   type="button"
                   onClick={() => handleStatusSelect("Overdue")}
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100"
+                  className="inline-flex w-full px-4 py-2 hover:bg-green-300"
                 >
                   Overdue
                 </button>
@@ -85,7 +85,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onStatusFilter }) => 
                 <button
                   type="button"
                   onClick={() => handleStatusSelect("Returned")}
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100"
+                  className="inline-flex w-full px-4 py-2 hover:bg-green-300"
                 >
                   Returned
                 </button>

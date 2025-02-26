@@ -88,13 +88,13 @@ const LogsPage: React.FC = () => {
       {/* Main content area */}
       <div className="flex-1 p-6">
         {/* Logo, SearchForm, and Add Button */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 ">
           {/* Logo */}
           <div className="flex items-center">
             <img
               src="src/assets/V.ship_logo_green.svg"
               alt="Logo"
-              className="h-10 w-auto mr-4"
+              className="h-10 w-auto mr-4 filter brightness-0 invert-[20%] sepia-[90%] saturate-[500%] hue-rotate-[100deg]"
             />
             <SearchForm onSearch={handleSearch} onStatusFilter={handleStatusFilter} />
           </div>

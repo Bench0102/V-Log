@@ -26,11 +26,11 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete }) => {
   };
 
   return (
-    <div className="overflow-x-auto bg-white border border-gray-300 rounded-lg shadow-sm">
+    <div className="overflow-x-auto bg-white border border-gray-400 rounded-lg shadow-sm">
       {/* Table Container with Fixed Height */}
       <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
         <table className="w-full">
-          <thead className="sticky top-0 bg-gray-100">
+          <thead className="sticky top-0 bg-green-700 text-white">
             <tr>
               {[
                 "Full Name",
@@ -44,7 +44,7 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete }) => {
                 "Date Returned",
                 "Actions",
               ].map((header) => (
-                <th key={header} className="px-6 py-4 text-left text-sm font-medium text-gray-700 z-50">
+                <th key={header} className="px-6 py-4 text-left text-sm font-medium text-white z-50">
                   {header}
                 </th>
               ))}
@@ -52,7 +52,7 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete }) => {
           </thead>
           <tbody>
             {borrowRecords.map((record) => (
-              <tr key={record.id} className="border-b hover:bg-green-300 transition-colors">
+              <tr key={record.id} className="border-b hover:bg-green-100 transition-colors">
                 <td className="px-6 py-4 text-sm text-gray-900">{record.fullName}</td>
                 <td className="px-6 py-4 text-sm text-gray-900">{record.itemName}</td>
                 <td className="px-6 py-4 text-sm text-gray-900">{record.assetTag}</td>

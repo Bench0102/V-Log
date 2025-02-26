@@ -24,13 +24,13 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex ml-40 h-screen items-center justify-center sm:py-12 overflow-hidden">
+    <div className="flex w-full ml-40 h-screen items-center justify-center sm:py-12 overflow-hidden">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-green-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-          <div className="max-w-md mx-auto">
+        <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-700 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-9 sm:rounded-3xl"></div>
+        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-27">
+          <div className="max-w-lg mx-auto">
             <div>
-              <h1 className="text-2xl font-semibold text-center">Login</h1>
+              <h1 className="text-3xl font-bold text-center text-green-600">Login</h1>
             </div>
             <div className="divide-y divide-gray-200">
               <form onSubmit={handleLogin} className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
@@ -79,7 +79,7 @@ const Login: React.FC = () => {
                 <div className="relative">
                   <button
                     type="submit"
-                    className="bg-green-500 text-white rounded-md px-4 py-2 w-full hover:bg-green-700"
+                    className="bg-green-700 text-white rounded-md px-4 py-2 w-full hover:bg-green-500"
                   >
                     Submit
                   </button>

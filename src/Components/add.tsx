@@ -47,7 +47,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="ml-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800"
+        className="ml-4 px-6 py-2 bg-green-800 text-white rounded-lg hover:bg-green-600"
       >
         New Item
       </button>
@@ -56,8 +56,8 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
       {isModalOpen && (
         <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-semibold mb-4">Add New Entry</h2>
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <h2 className="text-xl font-bold mb-6">Add New Entry</h2>
+            <form onSubmit={handleSubmit} className="space-y">
               {/* Form Fields */}
               {[
                 { label: "Full Name", name: "fullName" },
@@ -93,7 +93,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
               <div className="flex justify-between">
                 <label className="font-medium">Status:</label>
                 <select
-                  className="w-2/3 p-1 border border-gray-300 rounded-lg"
+                  className="w-2/3 p-1 border border-gray-300 rounded-lg hover:text-green-200"
                   value={formData.status}
                   onChange={(e) =>
                     setFormData({ ...formData, status: e.target.value as "Borrowed" | "Overdue" | "Returned" }) // Fix type mismatch
@@ -111,11 +111,11 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+                  className="px-4 py-2 bg-green-700 text-white rounded-lg hover:text-green-200 transition-colors duration-100"
                 >
                   Cancel
                 </button>
-                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg">
+                <button type="submit" className="px-4 py-2 bg-green-700 text-white rounded-lg hover:text-green-200 transition-colors duration-100">
                   Add Entry
                 </button>
               </div>

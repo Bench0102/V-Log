@@ -4,7 +4,6 @@ import {
   IoGrid,
   IoPeopleOutline,
   IoPeople,
-  IoPerson,
   IoFileTrayStackedOutline,
   IoFileTrayStacked,
   
@@ -13,20 +12,20 @@ import Logout from "../../Components/logout"
 
 const Sidebar: React.FC = () => {
   return (
-    <div className="w-15 h-screen flex flex-col bg-amber-100 text-onBackground pt-2.5 pb-3.5 z-999">
+    <div className="w-15 h-screen flex flex-col bg-green-800 text-onBackground pt-2.5 pb-3.5 z-999">
       {/* Dashboard Section */}
       <nav className="mb-2.5 flex-shrink-0 flex flex-col gap-1.5">
         <SidebarOption
           label="dashboard"
           hrefPath="dashboard"
           subChildren={
-            <div className="bg-green-600 text-onSecondary rounded-lg p-1.5">
-              <IoGrid className="text-3xl leading-none" />
+            <div className="text-onSecondary rounded-lg p-1.5 hover:text-green-300 ">
+              <IoGrid className="text-3xl leading-none text-white transition-colors duration-200" />
             </div>
           }
         >
-          <div className="bg-green-500 text-onSecondary rounded-lg p-1.5">
-            <IoGridOutline className="text-3xl leading-none" />
+          <div className=" text-onSecondary rounded-lg p-1.5">
+            <IoGridOutline className="text-3xl leading-none text-white hover:text-green-300 " />
           </div>
         </SidebarOption>
       </nav>
@@ -36,23 +35,23 @@ const Sidebar: React.FC = () => {
         <SidebarOption
           label="logs"
           hrefPath="logspage"
-          subChildren={<IoFileTrayStacked className="text-2xl leading-none" />}
+          subChildren={<IoFileTrayStacked className="text-2xl leading-none text-white hover:text-green-300" />}
         >
-          <IoFileTrayStackedOutline className="text-2xl leading-none" />
+          <IoFileTrayStackedOutline className="text-2xl leading-none text-white hover:text-green-300" />
         </SidebarOption>
 
         <SidebarOption
           label="users"
           hrefPath="users"
-          subChildren={<IoPeople className="text-2xl leading-none" />}
+          subChildren={<IoPeople className="text-2xl leading-none mb-5 text-white hover:text-green-300 transition-colors duration-200 " />}
         >
-          <IoPeopleOutline className="text-2xl leading-none" />
+          <IoPeopleOutline className="text-2xl leading-none  mb-5 text-white text-white hover:text-green-300" />
         </SidebarOption>
 
       </nav>
 
       {/* Bottom Navigation Section */}
-      <nav className="flex flex-col justify-end mb-5">
+      <nav className="flex flex-col justify-end mb-5  text-white hover:text-green-600 ">
           <div>
             <Logout/>
           </div>
