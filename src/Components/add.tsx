@@ -55,9 +55,9 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
       {/* Modal Form */}
       {isModalOpen && (
         <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-bold mb-6">Add New Entry</h2>
-            <form onSubmit={handleSubmit} className="space-y">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+            <h2 className="text-xl text-green-800 font-extrabold mb-6">Add New Entry</h2>
+            <form onSubmit={handleSubmit} className="space-y-4 text-green-800">
               {/* Form Fields */}
               {[
                 { label: "Full Name", name: "fullName" },
@@ -93,7 +93,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
               <div className="flex justify-between">
                 <label className="font-medium">Status:</label>
                 <select
-                  className="w-2/3 p-1 border border-gray-300 rounded-lg hover:text-green-200"
+                  className="w-2/3 p-1 border border-green-300 rounded-lg hover:border-green-500 hover:text-green-500"
                   value={formData.status}
                   onChange={(e) =>
                     setFormData({ ...formData, status: e.target.value as "Borrowed" | "Overdue" | "Returned" }) // Fix type mismatch
