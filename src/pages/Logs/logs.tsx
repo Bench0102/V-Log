@@ -27,73 +27,81 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete }) => {
 
   return (
     <div className="overflow-x-auto bg-white border border-gray-400 rounded-lg shadow-sm">
-      {/* Table Container with Fixed Height */}
-      <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-        <table className="w-full">
-          <thead className="sticky top-0 bg-green-700 text-white">
-            <tr>
-              {[
-                "Full Name",
-                "Item Name",
-                "Asset Tag",
-                "Date Borrowed",
-                "No. Days Borrowed",
-                "Reason",
-                "Status",
-                "Date to be Returned",
-                "Date Returned",
-                "Actions",
-              ].map((header) => (
-                <th key={header} className="px-6 py-4 text-left text-sm font-medium text-white z-50">
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {borrowRecords.map((record) => (
-              <tr key={record.id} className="border-b hover:bg-green-100 transition-colors">
-                <td className="px-6 py-4 text-sm text-gray-900">{record.fullName}</td>
-                <td className="px-6 py-4 text-sm text-gray-900">{record.itemName}</td>
-                <td className="px-6 py-4 text-sm text-gray-900">{record.assetTag}</td>
-                <td className="px-6 py-4 text-sm text-gray-900">{record.dateBorrowed}</td>
-                <td className="px-6 py-4 text-sm text-gray-900">{record.daysBorrowed}</td>
-                <td className="px-6 py-4 text-sm text-gray-900 max-w-[200px] whitespace-normal break-words">
-                  {record.reason}
-                </td>
-                <td className="px-6 py-4 text-sm">
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                      record.status
-                    )}`}
-                  >
-                    {record.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-900">{record.dateToBeReturned}</td>
-                <td className="px-6 py-4 text-sm text-gray-900">{record.dateReturned || "-"}</td>
-                <td className="px-6 py-4 text-sm">
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => onEdit(record)}
-                      className="text-blue-500 hover:text-blue-700 transition-colors"
-                    >
-                      <MdModeEdit size={20} />
-                    </button>
-                    <button
-                      onClick={() => onDelete(record.id)}
-                      className="text-red-500 hover:text-red-700 transition-colors"
-                    >
-                      <MdDelete size={20} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+  {/* Table Container with Scrollable Body */}
+  <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+    <table className="w-full table-auto">
+      {/* Sticky Table Header */}
+      <thead className="sticky top-0 bg-green-700 text-white">
+        <tr>
+          {[
+            "Full Name",
+            "Item Name",
+            "Asset Tag",
+            "Date Borrowed",
+            "No. Days Borrowed",
+            "Reason",
+            "Status",
+            "Date to be Returned",
+            "Date Returned",
+            "Actions",
+          ].map((header) => (
+            <th key={header} className="px-4 py-3 text-left text-xs md:text-sm font-medium text-white">
+              {header}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {borrowRecords.map((record) => (
+          <tr key={record.id} className="border-b hover:bg-green-100 transition-colors">
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[150px] break-words font-bold">
+              {record.fullName}
+            </td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.itemName}</td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.assetTag}</td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.dateBorrowed}</td>
+            
+            {/* Centered Column for "No. Days Borrowed" */}
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center">
+              {record.daysBorrowed}
+            </td>
+
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900 max-w-[150px] break-words">
+              {record.reason}
+            </td>
+            <td className="px-4 py-3 text-xs md:text-sm text-center">
+              <span
+                className={`inline-flex items-center px-3 py-1 rounded-full text-xs md:text-sm font-medium ${getStatusColor(
+                  record.status
+                )}`}
+              >
+                {record.status}
+              </span>
+            </td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.dateToBeReturned}</td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.dateReturned || "-"}</td>
+            <td className="px-4 py-3 text-xs md:text-sm">
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => onEdit(record)}
+                  className="text-blue-500 hover:text-blue-700 transition-colors"
+                >
+                  <MdModeEdit size={20} />
+                </button>
+                <button
+                  onClick={() => onDelete(record.id)}
+                  className="text-red-500 hover:text-red-700 transition-colors"
+                >
+                  <MdDelete size={20} />
+                </button>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
   );
 };
 

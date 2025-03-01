@@ -77,71 +77,66 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 flex-grow h-screen w-screen">
+    <div className="p-6 bg-gray-100 flex-grow min-h-screen w-full">
+  {/* Status Cards */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-lg font-semibold text-gray-700">Borrowed</h2>
+      <p className="text-3xl font-bold text-yellow-600">{statusCounts.Borrowed}</p>
+    </div>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-lg font-semibold text-gray-700">Returned</h2>
+      <p className="text-3xl font-bold text-green-600">{statusCounts.Returned}</p>
+    </div>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-lg font-semibold text-gray-700">Overdue</h2>
+      <p className="text-3xl font-bold text-red-600">{statusCounts.Overdue}</p>
+    </div>
+  </div>
 
-      {/* Status Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700">Borrowed</h2>
-          <p className="text-3xl font-bold text-yellow-600">{statusCounts.Borrowed}</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700">Returned</h2>
-          <p className="text-3xl font-bold text-green-600">{statusCounts.Returned}</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700">Overdue</h2>
-          <p className="text-3xl font-bold text-red-600">{statusCounts.Overdue}</p>
-        </div>
-      </div>
+  {/* Pie Chart */}
+  <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h2 className="text-lg font-semibold text-gray-700 mb-4 text-left">Status Distribution</h2>
+    <div className="w-full h-64 sm:h-80 md:w-2/3 lg:w-1/3 mx-auto">
+      <Doughnut
+        data={pieChartData}
+        options={{
+          responsive: true,
+          maintainAspectRatio: false,
+        }}
+      />
+    </div>
+  </div>
 
-      {/* Pie Chart */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4">Status Distribution</h2>
-        <div className="w-full h-64 mx-auto">
-          <Doughnut
-            data={pieChartData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false, // Allow the chart to resize freely
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Top 3 Most Borrowed Items and Top 3 Most Active Users */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Top 3 Most Borrowed Items */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">Top 3 Most Borrowed Items</h2>
-          <div className="space-y-2">
-            {mostBorrowedItems.map((item, index) => (
-              <div key={index} className="flex justify-between items-center">
-                <span className="text-lg font-medium text-gray-700">
-                  {index + 1}. {item.itemName}
-                </span>
-                <span className="text-lg font-bold text-blue-600">{item.count} borrows</span>
-              </div>
-            ))}
+  {/* Top 3 Most Borrowed Items & Top 3 Most Active Users */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    {/* Top 3 Most Borrowed Items */}
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-lg font-semibold text-gray-700 mb-4 text-left">Top 3 Most Borrowed Items</h2>
+      <div className="space-y-2">
+        {mostBorrowedItems.map((item, index) => (
+          <div key={index} className="flex justify-between items-center">
+            <span className="text-lg font-medium text-gray-700">{index + 1}. {item.itemName}</span>
+            <span className="text-lg font-bold text-blue-600">{item.count} borrows</span>
           </div>
-        </div>
-
-        {/* Top 3 Most Active Users */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">Top 3 Most Active Users</h2>
-          <div className="space-y-2">
-            {mostActiveUsers.map((user, index) => (
-              <div key={index} className="flex justify-between items-center">
-                <span className="text-lg font-medium text-gray-700">
-                  {index + 1}. {user.fullName}
-                </span>
-                <span className="text-lg font-bold text-purple-600">{user.count} borrows</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </div>
+
+    {/* Top 3 Most Active Users */}
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-lg font-semibold text-gray-700 mb-4 text-left">Top 3 Most Active Users</h2>
+      <div className="space-y-2">
+        {mostActiveUsers.map((user, index) => (
+          <div key={index} className="flex justify-between items-center">
+            <span className="text-lg font-medium text-gray-700">{index + 1}. {user.fullName}</span>
+            <span className="text-lg font-bold text-purple-600">{user.count} borrows</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
   );
 };
 

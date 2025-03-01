@@ -4,14 +4,14 @@ import Dashboard from "../Dashboard/dashboard"; // Adjust the import path as nee
 
 const DashPage: React.FC = () => {
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="w-15">
+      <div className="w-15 flex-shrink-0 ">
         <Sidebar />
       </div>
 
       {/* Dashboard */}
-      <div className="flex-grow">
+      <div className="flex-grow overflow-auto">
         <Dashboard />
       </div>
     </div>
