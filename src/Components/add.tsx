@@ -93,7 +93,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
               <div className="flex justify-between">
                 <label className="font-medium">Status:</label>
                 <select
-                  className="w-2/3 p-1 border border-green-300 rounded-lg hover:border-green-500 hover:text-green-500"
+                  className="w-2/3 p-1 border border-gray-300 rounded-lg hover:border-green-500 hover:text-green-500"
                   value={formData.status}
                   onChange={(e) =>
                     setFormData({ ...formData, status: e.target.value as "Borrowed" | "Overdue" | "Returned" }) // Fix type mismatch

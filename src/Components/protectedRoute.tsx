@@ -1,19 +1,16 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { getAuth } from "firebase/auth";
-import { app } from "../firebase"; // Adjust the path to your firebase.ts file
-
-const auth = getAuth(app);
 
 const ProtectedRoute: React.FC = () => {
-  const user = auth.currentUser; // Check if the user is authenticated
+  // Replace this with your actual authentication logic
+  const isAuthenticated = !!localStorage.getItem("authToken"); // Example: Check for a token in localStorage
 
-  if (!user) {
-    // If the user is not authenticated, redirect to the login page
-    return <Navigate to="/" />;
+  // If not authenticated, redirect to the login page
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
   }
 
-  // If the user is authenticated, render the child routes
+  // If authenticated, render the child routes
   return <Outlet />;
 };
 

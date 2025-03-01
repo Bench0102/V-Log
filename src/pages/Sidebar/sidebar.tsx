@@ -6,9 +6,9 @@ import {
   IoPeople,
   IoFileTrayStackedOutline,
   IoFileTrayStacked,
-  
 } from "react-icons/io5";
-import Logout from "../../Components/logout"
+import Logout from "../../Components/logout";
+import { Link } from "react-router-dom";
 
 const Sidebar: React.FC = () => {
   return (
@@ -17,14 +17,14 @@ const Sidebar: React.FC = () => {
       <nav className="mb-2.5 flex-shrink-0 flex flex-col gap-1.5">
         <SidebarOption
           label="dashboard"
-          hrefPath="dashboard"
+          hrefPath="dashpage" // Use absolute path
           subChildren={
             <div className="text-onSecondary rounded-lg p-1.5 hover:text-green-300 ">
               <IoGrid className="text-3xl leading-none text-white transition-colors duration-200" />
             </div>
           }
         >
-          <div className=" text-onSecondary rounded-lg p-1.5">
+          <div className="text-onSecondary rounded-lg p-1.5">
             <IoGridOutline className="text-3xl leading-none text-white hover:text-green-300 " />
           </div>
         </SidebarOption>
@@ -34,7 +34,7 @@ const Sidebar: React.FC = () => {
       <nav className="flex-grow-[2] flex-shrink-0 flex flex-col gap-5 mt-2">
         <SidebarOption
           label="logs"
-          hrefPath="logspage"
+          hrefPath="logspage" // Use absolute path
           subChildren={<IoFileTrayStacked className="text-2xl leading-none text-white hover:text-green-300" />}
         >
           <IoFileTrayStackedOutline className="text-2xl leading-none text-white hover:text-green-300" />
@@ -42,19 +42,18 @@ const Sidebar: React.FC = () => {
 
         <SidebarOption
           label="users"
-          hrefPath="users"
+          hrefPath="users" // Use absolute path
           subChildren={<IoPeople className="text-2xl leading-none mb-5 text-white hover:text-green-300 transition-colors duration-200 " />}
         >
-          <IoPeopleOutline className="text-2xl leading-none  mb-5 text-white text-white hover:text-green-300" />
+          <IoPeopleOutline className="text-2xl leading-none mb-5 text-white hover:text-green-300" />
         </SidebarOption>
-
       </nav>
 
       {/* Bottom Navigation Section */}
-      <nav className="flex flex-col justify-end mb-5  text-white hover:text-green-600 ">
-          <div>
-            <Logout/>
-          </div>
+      <nav className="flex flex-col justify-end mb-5 text-white hover:text-green-600">
+        <div>
+          <Logout />
+        </div>
       </nav>
     </div>
   );
@@ -72,13 +71,13 @@ const SidebarOption: React.FC<{
   badgeProp?: React.ReactNode;
 }> = ({ label, hrefPath, children, hasBadge, badgeProp }) => {
   return (
-    <a
-      href={hrefPath || "#"}
+    <Link
+      to={hrefPath ? `/${hrefPath}` : "#"} 
       className="flex items-center justify-center relative"
     >
       {children}
       {hasBadge && badgeProp}
       <span className="sr-only">{label}</span>
-    </a>
+    </Link>
   );
 };
