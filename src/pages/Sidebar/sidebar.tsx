@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 const Sidebar: React.FC = () => {
   return (
-    <div className="w-15 h-screen flex flex-col bg-green-800 text-onBackground pt-2.5 pb-3.5 z-999">
+    <div className="w-15  fixed h-screen flex flex-col bg-green-800 text-onBackground pt-2.5 pb-3.5 z-999">
       {/* Dashboard Section */}
       <nav className="mb-2.5 flex-shrink-0 flex flex-col gap-1.5">
         <SidebarOption
@@ -73,7 +73,7 @@ const SidebarOption: React.FC<{
   return (
     <Link
       to={hrefPath ? `/${hrefPath}` : "#"} 
-      className="flex items-center justify-center relative"
+      className="flex items-center justify-center relative "
     >
       {children}
       {hasBadge && badgeProp}

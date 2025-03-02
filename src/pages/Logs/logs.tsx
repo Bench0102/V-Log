@@ -28,8 +28,8 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete }) => {
   return (
     <div className="overflow-x-auto bg-white border border-gray-400 rounded-lg shadow-sm">
   {/* Table Container with Scrollable Body */}
-  <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-    <table className="w-full table-auto">
+  <div className="max-h-[calc(100vh-95px)] overflow-y-auto">
+    <table className="w-full table-auto ">
       {/* Sticky Table Header */}
       <thead className="sticky top-0 bg-green-700 text-white">
         <tr>
@@ -45,7 +45,7 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete }) => {
             "Date Returned",
             "Actions",
           ].map((header) => (
-            <th key={header} className="px-4 py-3 text-left text-xs md:text-sm font-medium text-white">
+            <th key={header} className="px-4 py-3 text-xs md:text-sm font-medium text-white text-left">
               {header}
             </th>
           ))}
@@ -57,9 +57,9 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete }) => {
             <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[150px] break-words font-bold">
               {record.fullName}
             </td>
-            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.itemName}</td>
-            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.assetTag}</td>
-            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.dateBorrowed}</td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900 ">{record.itemName}</td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-left">{record.assetTag}</td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-left">{record.dateBorrowed}</td>
             
             {/* Centered Column for "No. Days Borrowed" */}
             <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center">
@@ -78,8 +78,8 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete }) => {
                 {record.status}
               </span>
             </td>
-            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.dateToBeReturned}</td>
-            <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.dateReturned || "-"}</td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center">{record.dateToBeReturned}</td>
+            <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center">{record.dateReturned || "-"}</td>
             <td className="px-4 py-3 text-xs md:text-sm">
               <div className="flex space-x-2">
                 <button

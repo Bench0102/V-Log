@@ -79,7 +79,7 @@ const LogsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex w-screen min-h-screen bg-gray-100">
+    <div className="flex w-screen fixed min-h-screen bg-gray-100">
       {/* Sidebar */}
       <div className="w-15 flex-shrink-0">
         <Sidebar />
@@ -88,7 +88,7 @@ const LogsPage: React.FC = () => {
       {/* Main content area */}
       <div className="flex-1 p-6">
         {/* Logo, SearchForm, and Add Button */}
-        <div className="flex items-center justify-between mb-6 ">
+        <div className="flex items-center justify-between mb-6">
           {/* Logo */}
           <div className="flex items-center">
             <img
