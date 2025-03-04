@@ -1,13 +1,12 @@
-// src/Components/add.tsx
 import React, { useState } from "react";
-import { addRecord, BorrowRecord } from "../firebaseServices"; // Import from firebaseService
+import { BorrowRecord } from "../firebaseServices"; // Only import what's needed
+import { toast } from "react-hot-toast";
 
 interface AddProps {
-  onAddEntry: (newEntry: Omit<BorrowRecord, "id">) => Promise<BorrowRecord>;
-  setBorrowRecords: React.Dispatch<React.SetStateAction<BorrowRecord[]>>;
+  onAddEntry: (newEntry: Omit<BorrowRecord, "id">) => Promise<BorrowRecord>; // Remove setBorrowRecords
 }
 
-const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
+const Add: React.FC<AddProps> = ({ onAddEntry }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<Omit<BorrowRecord, "id">>({
     fullName: "",
@@ -16,7 +15,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
     dateBorrowed: "",
     daysBorrowed: 0,
     reason: "",
-    status: "Borrowed", // Ensure this matches the type "open" | "cancelled" | "Returned"
+    status: "Borrowed" as const, // Enforce the correct type
     dateToBeReturned: "",
     dateReturned: "",
   });
@@ -24,8 +23,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const newRecord = await onAddEntry(formData);
-      setBorrowRecords((prev) => [...prev, newRecord]); // Update state in parent
+      const newRecord = await onAddEntry(formData); // Call onAddEntry
       setFormData({
         fullName: "",
         itemName: "",
@@ -33,13 +31,15 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
         dateBorrowed: "",
         daysBorrowed: 0,
         reason: "",
-        status: "Borrowed", // Ensure this matches the type
+        status: "Borrowed",
         dateToBeReturned: "",
         dateReturned: "",
       });
       setIsModalOpen(false);
+      toast.success("Record added successfully!"); // Notify user of success
     } catch (error) {
       console.error("Error adding entry:", error);
+      toast.error("Failed to add record"); // Notify user of failure
     }
   };
 
@@ -96,7 +96,10 @@ const Add: React.FC<AddProps> = ({ onAddEntry, setBorrowRecords }) => {
                   className="w-2/3 p-1 border border-gray-300 rounded-lg hover:border-green-500 hover:text-green-500"
                   value={formData.status}
                   onChange={(e) =>
-                    setFormData({ ...formData, status: e.target.value as "Borrowed" | "Overdue" | "Returned" }) // Fix type mismatch
+                    setFormData({
+                      ...formData,
+                      status: e.target.value as "Borrowed" | "Overdue" | "Returned", // Enforce the correct type
+                    })
                   }
                   required
                 >

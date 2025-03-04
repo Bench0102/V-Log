@@ -20,8 +20,8 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onStatusFilter }) => 
   };
 
   const handleStatusSelect = (status: string) => {
-    setSelectedStatus(status);
-    onStatusFilter(status); // Call the onStatusFilter function with the selected status
+    setSelectedStatus(status === "View All" ? "" : status); // Reset status for "View All"
+    onStatusFilter(status === "View All" ? "" : status); // Call the onStatusFilter function with the selected status
     setIsDropdownOpen(false); // Close the dropdown after selection
   };
 
@@ -35,7 +35,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onStatusFilter }) => 
           className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-green-300 focus:ring-4 focus:outline-none focus:ring-gray-100"
           type="button"
         >
-          {selectedStatus || "Status"}
+          {selectedStatus || "Status"} {/* Display selected status or "Status" if none */}
           <svg
             className="w-2.5 h-2.5 ms-2.5"
             aria-hidden="true"
@@ -88,6 +88,15 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onStatusFilter }) => 
                   className="inline-flex w-full px-4 py-2 hover:bg-green-300"
                 >
                   Returned
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => handleStatusSelect("View All")}
+                  className="inline-flex w-full px-4 py-2 hover:bg-green-300"
+                >
+                  View All
                 </button>
               </li>
             </ul>

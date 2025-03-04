@@ -15,7 +15,7 @@ const LogsPage: React.FC = () => {
   const [selectedRecord, setSelectedRecord] = useState<BorrowRecord | null>(null);
   const [deleteRecordId, setDeleteRecordId] = useState<string | null>(null);
   const [filteredRecords, setFilteredRecords] = useState<BorrowRecord[]>([]);
-  const [statusFilter, setStatusFilter] = useState<string>(""); // State for status filter
+  const [statusFilter, setStatusFilter] = useState<string>("");
 
   // Fetch data from Firestore
   useEffect(() => {
@@ -23,7 +23,7 @@ const LogsPage: React.FC = () => {
       try {
         const records = await fetchRecords();
         setBorrowRecords(records);
-        setFilteredRecords(records); // Initialize filtered records
+        setFilteredRecords(records);
       } catch (error) {
         toast.error("Failed to fetch data");
       } finally {
@@ -32,6 +32,29 @@ const LogsPage: React.FC = () => {
     };
     loadData();
   }, []);
+
+  // Sync filteredRecords with borrowRecords
+  useEffect(() => {
+    if (statusFilter === "") {
+      setFilteredRecords(borrowRecords); // Reset filter to show all records
+    } else {
+      const filtered = borrowRecords.filter((record) => record.status === statusFilter);
+      setFilteredRecords(filtered); // Filter records based on status
+    }
+  }, [borrowRecords, statusFilter]);
+
+  // Handle adding a record
+  const handleAdd = async (newEntry: Omit<BorrowRecord, "id">) => {
+    try {
+      const addedRecord = await addRecord(newEntry); // Add the record to Firestore
+      setBorrowRecords((prev) => [...prev, addedRecord]); // Update borrowRecords
+      toast.success("Record added successfully!");
+      return addedRecord; // Return the added record with the Firestore-generated ID
+    } catch (error) {
+      toast.error("Failed to add record");
+      throw error; // Re-throw the error to propagate it
+    }
+  };
 
   // Handle updating a record
   const handleUpdate = async (updatedRecord: BorrowRecord) => {
@@ -47,25 +70,6 @@ const LogsPage: React.FC = () => {
     }
   };
 
-  // Handle search
-  const handleSearch = (searchTerm: string) => {
-    const filtered = borrowRecords.filter((record) =>
-      record.fullName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredRecords(filtered);
-  };
-
-  // Handle status filter
-  const handleStatusFilter = (status: string) => {
-    setStatusFilter(status);
-    if (status === "") {
-      setFilteredRecords(borrowRecords); // Reset filter if no status is selected
-    } else {
-      const filtered = borrowRecords.filter((record) => record.status === status);
-      setFilteredRecords(filtered);
-    }
-  };
-
   // Handle deleting a record
   const handleDelete = async (id: string) => {
     try {
@@ -76,6 +80,20 @@ const LogsPage: React.FC = () => {
       console.error("Error deleting record:", error);
       toast.error("Failed to delete record");
     }
+  };
+
+  // Handle search
+  const handleSearch = (searchTerm: string) => {
+    const filtered = borrowRecords.filter((record) =>
+      record.fullName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (statusFilter === "" || record.status === statusFilter)
+    );
+    setFilteredRecords(filtered);
+  };
+
+  // Handle status filter
+  const handleStatusFilter = (status: string) => {
+    setStatusFilter(status);
   };
 
   return (
@@ -89,7 +107,6 @@ const LogsPage: React.FC = () => {
       <div className="flex-1 p-6">
         {/* Logo, SearchForm, and Add Button */}
         <div className="flex items-center justify-between mb-6">
-          {/* Logo */}
           <div className="flex items-center">
             <img
               src="src/assets/V.ship_logo_green.svg"
@@ -98,9 +115,7 @@ const LogsPage: React.FC = () => {
             />
             <SearchForm onSearch={handleSearch} onStatusFilter={handleStatusFilter} />
           </div>
-
-          {/* Add New Entry Button */}
-          <Add onAddEntry={addRecord} setBorrowRecords={setBorrowRecords} />
+          <Add onAddEntry={handleAdd} />
         </div>
 
         {/* Loading Spinner */}
@@ -111,7 +126,7 @@ const LogsPage: React.FC = () => {
         ) : (
           /* Logs Table */
           <Logs
-            borrowRecords={filteredRecords.length > 0 ? filteredRecords : borrowRecords}
+            borrowRecords={filteredRecords}
             onEdit={(record) => setSelectedRecord(record)}
             onDelete={(id) => setDeleteRecordId(id)}
           />
