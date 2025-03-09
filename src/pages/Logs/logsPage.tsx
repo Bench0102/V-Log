@@ -5,7 +5,7 @@ import Logs from "../Logs/logs";
 import Add from "../../Components/add";
 import Update from "../../Components/update";
 import Delete from "../../Components/delete";
-import { fetchRecords, addRecord, deleteRecord, updateRecord, BorrowRecord } from "../../firebaseServices"; 
+import { fetchRecords, addRecord, deleteRecord, updateRecord, BorrowRecord } from "../../firebaseServices";
 import { toast, Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 
@@ -17,13 +17,34 @@ const LogsPage: React.FC = () => {
   const [filteredRecords, setFilteredRecords] = useState<BorrowRecord[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>("");
 
-  // Fetch data from Firestore
+  // Check if a record is overdue
+  const isOverdue = (record: BorrowRecord): boolean => {
+    const currentDate = new Date();
+    const expectedReturnDate = new Date(record.dateToBeReturned);
+    return currentDate > expectedReturnDate && record.status === "Borrowed";
+  };
+
+  // Update overdue records in Firestore and local state
+  const updateOverdueRecords = async (records: BorrowRecord[]): Promise<BorrowRecord[]> => {
+    const updatedRecords = records.map((record) => {
+      if (isOverdue(record)) {
+        const updatedRecord = { ...record, status: "Overdue" as const }; // Enforce the type
+        updateRecord(updatedRecord.id, updatedRecord); // Update Firestore
+        return updatedRecord;
+      }
+      return record;
+    });
+    return updatedRecords;
+  };
+
+  // Fetch data from Firestore and update overdue status
   useEffect(() => {
     const loadData = async () => {
       try {
         const records = await fetchRecords();
-        setBorrowRecords(records);
-        setFilteredRecords(records);
+        const updatedRecords = await updateOverdueRecords(records); // Update overdue records
+        setBorrowRecords(updatedRecords);
+        setFilteredRecords(updatedRecords);
       } catch (error) {
         toast.error("Failed to fetch data");
       } finally {
@@ -32,6 +53,16 @@ const LogsPage: React.FC = () => {
     };
     loadData();
   }, []);
+
+  // Periodically check for overdue records (every minute)
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const updatedRecords = await updateOverdueRecords(borrowRecords);
+      setBorrowRecords(updatedRecords);
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, [borrowRecords]);
 
   // Sync filteredRecords with borrowRecords
   useEffect(() => {
@@ -45,6 +76,7 @@ const LogsPage: React.FC = () => {
 
   // Handle adding a record
   const handleAdd = async (newEntry: Omit<BorrowRecord, "id">) => {
+    setLoading(true);
     try {
       const addedRecord = await addRecord(newEntry); // Add the record to Firestore
       setBorrowRecords((prev) => [...prev, addedRecord]); // Update borrowRecords
@@ -53,11 +85,14 @@ const LogsPage: React.FC = () => {
     } catch (error) {
       toast.error("Failed to add record");
       throw error; // Re-throw the error to propagate it
+    } finally {
+      setLoading(false);
     }
   };
 
   // Handle updating a record
   const handleUpdate = async (updatedRecord: BorrowRecord) => {
+    setLoading(true);
     try {
       await updateRecord(updatedRecord.id, updatedRecord);
       setBorrowRecords((prev) =>
@@ -67,11 +102,14 @@ const LogsPage: React.FC = () => {
     } catch (error) {
       console.error("Error updating record:", error);
       toast.error("Failed to update record");
+    } finally {
+      setLoading(false);
     }
   };
 
   // Handle deleting a record
   const handleDelete = async (id: string) => {
+    setLoading(true);
     try {
       await deleteRecord(id);
       setBorrowRecords((prev) => prev.filter((record) => record.id !== id));
@@ -79,6 +117,8 @@ const LogsPage: React.FC = () => {
     } catch (error) {
       console.error("Error deleting record:", error);
       toast.error("Failed to delete record");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -129,6 +169,18 @@ const LogsPage: React.FC = () => {
             borrowRecords={filteredRecords}
             onEdit={(record) => setSelectedRecord(record)}
             onDelete={(id) => setDeleteRecordId(id)}
+            onUpdateStatus={async (id, status) => {
+              try {
+                await updateRecord(id, { status: status as "Borrowed" | "Overdue" | "Returned" }); 
+                setBorrowRecords((prev) =>
+                  prev.map((record) =>
+                    record.id === id ? { ...record, status: status as "Borrowed" | "Overdue" | "Returned" } : record
+                  )
+                );
+              } catch (error) {
+                toast.error("Failed to update status");
+              }
+            }}
           />
         )}
       </div>

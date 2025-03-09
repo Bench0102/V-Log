@@ -12,6 +12,7 @@ import Login from "./pages/Login/login";
 import Logspage from './pages/Logs/logsPage';
 import ProtectedRoute from './Components/protectedRoute'; 
 import Dashpage from "./pages/Dashboard/dashpage";
+import Userpage from "./pages/User/userpage"
 
 // Define your routes
 const router = createBrowserRouter(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route element={<ProtectedRoute />}>
         <Route path="/dashpage" element={<Dashpage />} />
         <Route path="/logspage" element={<Logspage />} />
+        <Route path="/userpage" element={<Userpage />} />
       </Route>
     </>
   )

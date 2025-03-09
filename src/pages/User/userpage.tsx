@@ -1,0 +1,187 @@
+import React, { useState, useEffect } from "react";
+import { addUser, deleteUserAccount, fetchUsers } from "../../firebaseAuthServices";
+import { auth } from "../../firebase";
+import { User } from "firebase/auth";
+import { toast, Toaster } from "react-hot-toast";
+import { MdDelete } from "react-icons/md";
+import Sidebar from "../Sidebar/sidebar";
+
+interface UserProfile {
+  uid: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+const UserPage: React.FC = () => {
+  const [users, setUsers] = useState<UserProfile[]>([]); // List of users
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [email, setEmail] = useState(""); // New user email
+  const [password, setPassword] = useState(""); // New user password
+  const [firstName, setFirstName] = useState(""); // New user first name
+  const [lastName, setLastName] = useState(""); // New user last name
+
+  // Fetch all users on component mount
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const users = await fetchUsers();
+        setUsers(users);
+      } catch (error) {
+        toast.error("Failed to fetch users");
+      }
+    };
+    loadUsers();
+  }, []);
+
+  // Handle adding a new user
+  const handleAddUser = async () => {
+    try {
+      await addUser(email, password, firstName, lastName);
+      toast.success("User added successfully!");
+      setIsModalOpen(false); // Close the modal
+      setEmail(""); // Reset email
+      setPassword(""); // Reset password
+      setFirstName(""); // Reset first name
+      setLastName(""); // Reset last name
+      // Refresh the user list
+      const updatedUsers = await fetchUsers();
+      setUsers(updatedUsers);
+    } catch (error) {
+      toast.error("Failed to add user");
+    }
+  };
+
+  // Handle deleting a user
+  const handleDeleteUser = async (user: UserProfile) => {
+    try {
+      const authUser = auth.currentUser;
+      if (authUser && authUser.uid === user.uid) {
+        await deleteUserAccount(authUser);
+      }
+      toast.success("User deleted successfully!");
+      // Refresh the user list
+      const updatedUsers = await fetchUsers();
+      setUsers(updatedUsers);
+    } catch (error) {
+      toast.error("Failed to delete user");
+    }
+  };
+
+  return (
+    <div className="flex w-screen fixed min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div className="w-15 flex-shrink-0">
+        <Sidebar />
+      </div>
+
+      {/* Main content area */}
+      <div className="flex-1 p-6">
+        {/* Add User Button */}
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors mb-6"
+        >
+          Add User
+        </button>
+
+        {/* Add User Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+              <h2 className="text-xl font-bold mb-4">Add New User</h2>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div className="flex justify-end space-x-2 mt-4">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddUser}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Users Table */}
+        <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  First Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  Last Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {users.map((user) => (
+                <tr key={user.uid} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 text-sm text-gray-900">{user.firstName}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{user.lastName}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{user.email}</td>
+                  <td className="px-6 py-4 text-sm">
+                    <button
+                      onClick={() => handleDeleteUser(user)}
+                      className="text-red-500 hover:text-red-700 transition-colors"
+                    >
+                      <MdDelete size={20} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Toast Notifications */}
+        <Toaster position="bottom-right" />
+      </div>
+    </div>
+  );
+};
+
+export default UserPage;

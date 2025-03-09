@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
 
         <SidebarOption
           label="users"
-          hrefPath="users" // Use absolute path
+          hrefPath="userpage" // Use absolute path
           subChildren={<IoPeople className="text-2xl leading-none mb-5 text-white hover:text-green-300 transition-colors duration-200 " />}
         >
           <IoPeopleOutline className="text-2xl leading-none mb-5 text-white hover:text-green-300" />
