@@ -14,7 +14,7 @@ interface LogsProps {
 const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateStatus }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState<{ key: keyof BorrowRecord; direction: "asc" | "desc" } | null>(null);
-  const recordsPerPage = 9;
+  const recordsPerPage = 15;
 
   // Function to check and update status
   useEffect(() => {

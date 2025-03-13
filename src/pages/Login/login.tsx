@@ -29,7 +29,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full ml-40 h-screen items-center justify-center sm:py-12 overflow-hidden">
+    <div className="flex h-screen items-center justify-center sm:py-12 overflow-hidden ">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-700 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-9 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-27">

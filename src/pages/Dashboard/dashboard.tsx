@@ -81,22 +81,22 @@ const Dashboard: React.FC = () => {
   {/* Status Cards */}
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold text-gray-700">Borrowed</h2>
+      <h2 className="text-lg font-bold text-black-700">Borrowed</h2>
       <p className="text-3xl font-bold text-yellow-600">{statusCounts.Borrowed}</p>
     </div>
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold text-gray-700">Returned</h2>
+      <h2 className="text-lg font-bold text-black-700">Returned</h2>
       <p className="text-3xl font-bold text-green-600">{statusCounts.Returned}</p>
     </div>
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold text-gray-700">Overdue</h2>
+      <h2 className="text-lg font-bold text-black-700">Overdue</h2>
       <p className="text-3xl font-bold text-red-600">{statusCounts.Overdue}</p>
     </div>
   </div>
 
   {/* Pie Chart */}
   <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-    <h2 className="text-lg font-semibold text-gray-700 mb-4 text-left">Status Distribution</h2>
+    <h2 className="text-lg font-bold text-black-700 mb-4 text-left">Status Distribution</h2>
     <div className="w-full h-64 sm:h-80 md:w-2/3 lg:w-1/3 mx-auto">
       <Doughnut
         data={pieChartData}
@@ -112,7 +112,7 @@ const Dashboard: React.FC = () => {
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
     {/* Top 3 Most Borrowed Items */}
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold text-gray-700 mb-4 text-left">Top 3 Most Borrowed Items</h2>
+      <h2 className="text-lg font-bold text-black-700 mb-4 text-left">Top 3 Most Borrowed Items</h2>
       <div className="space-y-2">
         {mostBorrowedItems.map((item, index) => (
           <div key={index} className="flex justify-between items-center">
@@ -125,7 +125,7 @@ const Dashboard: React.FC = () => {
 
     {/* Top 3 Most Active Users */}
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold text-gray-700 mb-4 text-left">Top 3 Most Active Users</h2>
+      <h2 className="text-lg font-bold text-black-700 mb-4 text-left">Top 3 Most Active Users</h2>
       <div className="space-y-2">
         {mostActiveUsers.map((user, index) => (
           <div key={index} className="flex justify-between items-center">
