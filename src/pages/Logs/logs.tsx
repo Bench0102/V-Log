@@ -8,51 +8,47 @@ interface LogsProps {
   borrowRecords: BorrowRecord[];
   onEdit: (record: BorrowRecord) => void;
   onDelete: (id: string) => void;
-  onUpdateStatus: (id: string, status: string) => void; // Add this prop to handle status updates
+  onUpdateStatus: (id: string, status: string) => void;
 }
 
 const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateStatus }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof BorrowRecord; direction: "asc" | "desc" } | null>(null);
-  const recordsPerPage = 15;
+  const [sortConfig, setSortConfig] = useState<{ key: keyof BorrowRecord; direction: "asc" | "desc" } | null>({
+    key: "dateBorrowed", // Default sort by dateBorrowed
+    direction: "desc", // Most recent at the top
+  });
 
-  // Function to check and update status
+  // Update status for overdue records
   useEffect(() => {
     const currentDate = new Date();
-
     borrowRecords.forEach((record) => {
-      if (
-        record.status === "Borrowed" &&
-        isAfter(currentDate, new Date(record.dateToBeReturned))
-      ) {
+      if (record.status === "Borrowed" && isAfter(currentDate, new Date(record.dateToBeReturned))) {
         onUpdateStatus(record.id, "Overdue");
       }
     });
   }, [borrowRecords, onUpdateStatus]);
 
+  // Sort records
   const sortedRecords = useMemo(() => {
     if (!sortConfig) return borrowRecords;
 
     return [...borrowRecords].sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) {
-        return sortConfig.direction === "asc" ? -1 : 1;
+      // Handle date comparison for dateBorrowed
+      if (sortConfig.key === "dateBorrowed") {
+        const dateA = new Date(a.dateBorrowed).getTime();
+        const dateB = new Date(b.dateBorrowed).getTime();
+        return sortConfig.direction === "asc" ? dateA - dateB : dateB - dateA;
       }
-      if (a[sortConfig.key] > b[sortConfig.key]) {
-        return sortConfig.direction === "asc" ? 1 : -1;
-      }
+
+      // Default comparison for other fields
+      if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === "asc" ? -1 : 1;
+      if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === "asc" ? 1 : -1;
       return 0;
     });
   }, [borrowRecords, sortConfig]);
 
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = sortedRecords.slice(indexOfFirstRecord, indexOfLastRecord);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   const requestSort = (key: keyof BorrowRecord) => {
     let direction: "asc" | "desc" = "asc";
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === "asc") {
+    if (sortConfig?.key === key && sortConfig.direction === "asc") {
       direction = "desc";
     }
     setSortConfig({ key, direction });
@@ -80,9 +76,9 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
   }
 
   return (
-    <div className="bg-white border border-gray-400 rounded-lg shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
       {/* Table Container */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-h-[83vh]"> {/* Adjust max-height as needed */}
         <table className="w-full table-auto">
           <thead className="sticky top-0 bg-green-700 text-white">
             <tr>
@@ -100,7 +96,7 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
               ].map((header) => (
                 <th
                   key={header}
-                  className="px-4 py-3 text-xs md:text-sm font-medium text-white text-left cursor-pointer"
+                  className="px-4 py-3 text-xs md:text-sm font-medium text-left cursor-pointer"
                   onClick={() => requestSort(header.toLowerCase() as keyof BorrowRecord)}
                 >
                   {header} {sortConfig?.key === header.toLowerCase() && (sortConfig.direction === "asc" ? "↑" : "↓")}
@@ -109,21 +105,27 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
             </tr>
           </thead>
           <tbody>
-            {currentRecords.map((record) => (
-              <tr key={record.id} className="border-b hover:bg-green-100 transition-colors">
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[150px] break-words font-bold">
+            {sortedRecords.map((record) => (
+              <tr key={record.id} className="border-b hover:bg-green-50 transition-colors">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[150px] max-w-[200px] truncate font-bold">
                   {record.fullName}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900">{record.itemName}</td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-left">{record.assetTag}</td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-left">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[120px] max-w-[150px] truncate">
+                  {record.itemName}
+                </td>
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[100px] max-w-[120px] truncate">
+                  {record.assetTag}
+                </td>
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[120px] max-w-[150px] truncate">
                   {format(new Date(record.dateBorrowed), "MMM dd, yyyy")}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center">{record.daysBorrowed}</td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 max-w-[150px] break-words">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center min-w-[100px]">
+                  {record.daysBorrowed}
+                </td>
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[150px] max-w-[200px] truncate">
                   {record.reason}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-center">
+                <td className="px-4 py-3 text-xs md:text-sm text-center min-w-[100px]">
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-xs md:text-sm font-medium ${getStatusColor(
                       record.status
@@ -132,13 +134,13 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
                     {record.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[120px] max-w-[150px] truncate">
                   {format(new Date(record.dateToBeReturned), "MMM dd, yyyy")}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[120px] max-w-[150px] truncate">
                   {record.dateReturned ? format(new Date(record.dateReturned), "MMM dd, yyyy") : "-"}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm">
+                <td className="px-4 py-3 text-xs md:text-sm min-w-[100px]">
                   <div className="flex space-x-2">
                     <button
                       data-tooltip-id="edit-tooltip"
@@ -164,21 +166,6 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Pagination Buttons (Outside the Table) */}
-      <div className="flex justify-center  pb-4">
-        {Array.from({ length: Math.ceil(sortedRecords.length / recordsPerPage) }, (_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => paginate(i + 1)}
-            className={`mx-1 px-3 py-1 rounded ${
-              currentPage === i + 1 ? "bg-green-700 text-white" : "bg-gray-200"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
       </div>
     </div>
   );
