@@ -138,7 +138,7 @@ const ItemAssetTagModal: React.FC<ItemAssetTagModalProps> = ({ isOpen, onClose, 
         </div>
 
         {/* Scrollable List of Items */}
-        <div className="max-h-[200px] overflow-y-auto mb-4 border border-gray-300 rounded-lg p-2">
+        <div className="max-h-[40vh] overflow-y-auto mb-4 border border-gray-300 rounded-lg p-2">
           {items.map((item) => (
             <div key={item} className="flex items-center justify-between p-1">
               <label className="flex items-center">
@@ -161,7 +161,7 @@ const ItemAssetTagModal: React.FC<ItemAssetTagModalProps> = ({ isOpen, onClose, 
         </div>
 
         {/* Selected Items with Asset Tag Inputs */}
-        <div className="max-h-[200px] overflow-y-auto border border-gray-300 rounded-lg p-2">
+        <div className="max-h-[35vh] overflow-y-auto border border-gray-300 rounded-lg p-2">
           {selectedItems.map((item) => (
             <div key={item} className="flex flex-col p-1">
               <div className="flex items-center justify-between">

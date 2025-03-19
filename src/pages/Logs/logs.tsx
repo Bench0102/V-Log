@@ -78,7 +78,7 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
       {/* Table Container */}
-      <div className="overflow-x-auto max-h-[83vh]"> {/* Adjust max-height as needed */}
+      <div className="overflow-y-auto max-h-[93vh] w-full  md:max-h-[80vh]"> {/* Enable vertical scrolling only */}
         <table className="w-full table-auto">
           <thead className="sticky top-0 bg-green-700 text-white">
             <tr>
@@ -96,7 +96,7 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
               ].map((header) => (
                 <th
                   key={header}
-                  className="px-4 py-3 text-xs md:text-sm font-medium text-left cursor-pointer"
+                  className="px-4 py-3 text-xs md:text-sm font-medium text-left"
                   onClick={() => requestSort(header.toLowerCase() as keyof BorrowRecord)}
                 >
                   {header} {sortConfig?.key === header.toLowerCase() && (sortConfig.direction === "asc" ? "↑" : "↓")}
@@ -107,25 +107,25 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
           <tbody>
             {sortedRecords.map((record) => (
               <tr key={record.id} className="border-b hover:bg-green-50 transition-colors">
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[150px] max-w-[200px] truncate font-bold">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 whitespace-normal">
                   {record.fullName}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[120px] max-w-[150px] truncate">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 whitespace-normal">
                   {record.itemName}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[100px] max-w-[120px] truncate">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 whitespace-normal">
                   {record.assetTag}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[120px] max-w-[150px] truncate">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 whitespace-normal">
                   {format(new Date(record.dateBorrowed), "MMM dd, yyyy")}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center min-w-[100px]">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 text-center whitespace-normal">
                   {record.daysBorrowed}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[150px] max-w-[200px] truncate">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 whitespace-normal">
                   {record.reason}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-center min-w-[100px]">
+                <td className="px-4 py-3 text-xs md:text-sm text-center whitespace-normal">
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-xs md:text-sm font-medium ${getStatusColor(
                       record.status
@@ -134,13 +134,13 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
                     {record.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[120px] max-w-[150px] truncate">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 whitespace-normal">
                   {format(new Date(record.dateToBeReturned), "MMM dd, yyyy")}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 min-w-[120px] max-w-[150px] truncate">
+                <td className="px-4 py-3 text-xs md:text-sm text-gray-900 whitespace-normal">
                   {record.dateReturned ? format(new Date(record.dateReturned), "MMM dd, yyyy") : "-"}
                 </td>
-                <td className="px-4 py-3 text-xs md:text-sm min-w-[100px]">
+                <td className="px-4 py-3 text-xs md:text-sm whitespace-normal">
                   <div className="flex space-x-2">
                     <button
                       data-tooltip-id="edit-tooltip"
@@ -155,7 +155,7 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
                       data-tooltip-id="delete-tooltip"
                       data-tooltip-content="Delete Record"
                       onClick={() => onDelete(record.id)}
-                      className="text-red-500 hover:text-red-700 transition-colors"
+                      className="text-red-500 transition-colors"
                     >
                       <MdDelete size={20} />
                     </button>
