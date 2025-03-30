@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { addUser, deleteUserAccount, fetchUsers } from "../../firebaseAuthServices";
-import { auth } from "../../firebase";
-import { User } from "firebase/auth";
 import { toast, Toaster } from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
 import Sidebar from "../Sidebar/sidebar";
@@ -39,34 +37,36 @@ const UserPage: React.FC = () => {
     try {
       await addUser(email, password, firstName, lastName);
       toast.success("User added successfully!");
-      setIsModalOpen(false); // Close the modal
-      setEmail(""); // Reset email
-      setPassword(""); // Reset password
-      setFirstName(""); // Reset first name
-      setLastName(""); // Reset last name
-      // Refresh the user list
+      setIsModalOpen(false);
+      setEmail("");
+      setPassword("");
+      setFirstName("");
+      setLastName("");
       const updatedUsers = await fetchUsers();
       setUsers(updatedUsers);
     } catch (error) {
-      toast.error("Failed to add user");
+      if (error instanceof Error) {
+        toast.error(error.message); // Show the specific error message
+      } else {
+        toast.error("Failed to add user");
+      }
     }
   };
 
-  // Handle deleting a user
   const handleDeleteUser = async (user: UserProfile) => {
     try {
-      const authUser = auth.currentUser;
-      if (authUser && authUser.uid === user.uid) {
-        await deleteUserAccount(authUser);
-      }
+      await deleteUserAccount(user.uid); // Pass only UID, as we fixed the function above
+  
+      // Update state immediately without needing to fetch again
+      setUsers((prevUsers) => prevUsers.filter((u) => u.uid !== user.uid));
+  
       toast.success("User deleted successfully!");
-      // Refresh the user list
-      const updatedUsers = await fetchUsers();
-      setUsers(updatedUsers);
     } catch (error) {
+      console.error("Error deleting user:", error);
       toast.error("Failed to delete user");
     }
   };
+  
 
   return (
     <div className="flex w-screen fixed min-h-screen bg-gray-100">

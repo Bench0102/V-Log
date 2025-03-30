@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 // Define the BorrowRecord interface
 export interface BorrowRecord {
   id: string;
+  email: string;
   fullName: string;
   itemName: string;
   assetTag: string;

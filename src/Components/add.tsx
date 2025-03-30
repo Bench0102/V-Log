@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { BorrowRecord } from "../firebaseServices";
-import { toast } from "react-hot-toast";
-import ItemAssetTagModal from "../Components/itemassettagmodal"; // Combined modal component
+import ItemAssetTagModal from "../Components/itemassettagmodal"; 
 
 interface AddProps {
   onAddEntry: (newEntry: Omit<BorrowRecord, "id">) => Promise<BorrowRecord>;
@@ -14,6 +13,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry }) => {
   const [assetTags, setAssetTags] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<Omit<BorrowRecord, "id">>({
     fullName: "",
+    email:"",
     itemName: "", // Comma-separated list of selected items
     assetTag: "", // Comma-separated list of assigned asset tags
     dateBorrowed: "",
@@ -51,6 +51,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry }) => {
       // Reset the form and state
       setFormData({
         fullName: "",
+        email: "",
         itemName: "",
         assetTag: "",
         dateBorrowed: "",
@@ -64,10 +65,8 @@ const Add: React.FC<AddProps> = ({ onAddEntry }) => {
       setAssetTags({}); // Clear asset tags
       setIsModalOpen(false);
 
-      toast.success("Records added successfully!");
     } catch (error) {
       console.error("Error adding entries:", error);
-      toast.error("Failed to add records");
     }
   };
 
@@ -77,7 +76,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry }) => {
         onClick={() => setIsModalOpen(true)}
         className="ml-4 px-6 py-2 bg-green-800 text-white rounded-lg hover:bg-green-600"
       >
-        New Item
+        Borrow
       </button>
 
       {/* Modal Form */}
@@ -94,6 +93,16 @@ const Add: React.FC<AddProps> = ({ onAddEntry }) => {
                   className="w-2/3 p-1 border border-gray-300 rounded-lg"
                   value={formData.fullName}
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="flex justify-between">
+                <label className="font-medium">Email:</label>
+                <input
+                  type="email"
+                  className="w-2/3 p-1 border border-gray-300 rounded-lg"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                 />
               </div>
@@ -185,7 +194,7 @@ const Add: React.FC<AddProps> = ({ onAddEntry }) => {
                   Cancel
                 </button>
                 <button type="submit" className="px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-600">
-                  Add Entry
+                  Submit
                 </button>
               </div>
             </form>
