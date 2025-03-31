@@ -5,7 +5,6 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
-  doc,
   DocumentData,
   QueryDocumentSnapshot,
 } from "firebase/firestore"; // Import Firestore functions

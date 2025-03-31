@@ -109,7 +109,7 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Top 3 Most Borrowed Items */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-bold text-black-700 mb-4 text-left">Top 3 Most Borrowed Items</h2>
+          <h2 className="text-lg font-bold text-black-700 mb-4 text-left">Top Borrowed Items</h2>
           <div className="space-y-2">
             {mostBorrowedItems.map((item, index) => (
               <div key={index} className="flex justify-between items-center">
@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
 
         {/* Top 3 Most Active Users */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-bold text-black-700 mb-4 text-left">Top 3 Most Active Users</h2>
+          <h2 className="text-lg font-bold text-black-700 mb-4 text-left">Top Borrower</h2>
           <div className="space-y-2">
             {mostActiveUsers.map((user, index) => (
               <div key={index} className="flex justify-between items-center">

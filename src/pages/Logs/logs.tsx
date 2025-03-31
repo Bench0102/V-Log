@@ -76,29 +76,32 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-      <div className="overflow-y-auto max-h-[93vh] w-full md:max-h-[80vh]">
+      <div className="overflow-y-auto max-h-[93vh] md:max-h-[84vh]">
         <table className="w-full table-auto">
           <thead className="sticky top-0 bg-green-700 text-white">
             <tr>
               {[
-                "Full Name",
-                "Email",
-                "Item Name",
-                "Asset Tag",
-                "Date Borrowed",
-                "Days Borrowed",
-                "Reason",
-                "Status",
-                "Return Date",
-                "Date Returned",
-                "Actions",
-              ].map((header) => (
+                { header: "Full Name", width: "w-[120px]" },
+                { header: "Email", width: "w-[150px]" },
+                { header: "Item Name", width: "w-[100px]" },
+                { header: "Asset Tag", width: "w-[90px]" },
+                { header: "Date Borrowed", width: "w-[120px]" },
+                { header: "Days", width: "w-[70px]" },
+                { header: "Reason", width: "w-[150px]" },
+                { header: "Status", width: "w-[90px]" },
+                { header: "Return Date", width: "w-[120px]" },
+                { header: "Date Returned", width: "w-[120px]" },
+                { header: "Actions", width: "w-[80px]" },
+              ].map(({ header, width }) => (
                 <th
                   key={header}
-                  className="px-2 py-3 text-xs md:text-sm font-medium text-center"
+                  className={`px-2 py-3 text-xs md:text-sm font-medium text-center ${width}`}
                   onClick={() => requestSort(header.toLowerCase().replace(/\s+/g, '') as keyof BorrowRecord)}
                 >
-                  {header} {sortConfig?.key === header.toLowerCase().replace(/\s+/g, '') && (sortConfig.direction === "asc" ? "↑" : "↓")}
+                  {header}
+                  {sortConfig?.key === header.toLowerCase().replace(/\s+/g, '') && (
+                    <span className="ml-1">{sortConfig.direction === "asc" ? "↑" : "↓"}</span>
+                  )}
                 </th>
               ))}
             </tr>
@@ -106,12 +109,9 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
           <tbody>
             {sortedRecords.map((record) => (
               <tr key={record.id} className="border-b hover:bg-green-50 transition-colors">
-                {/* Bold Full Name */}
                 <td className="px-2 py-2 text-xs md:text-sm text-gray-900 text-center whitespace-nowrap font-bold">
                   {record.fullName}
                 </td>
-                
-                {/* Rest of the columns remain the same */}
                 <td className="px-2 py-2 text-xs md:text-sm text-gray-900 text-center whitespace-nowrap">
                   {record.email || "-"}
                 </td>
@@ -127,12 +127,12 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
                 <td className="px-2 py-2 text-xs md:text-sm text-gray-900 text-center whitespace-nowrap">
                   {record.daysBorrowed}
                 </td>
-                <td className="px-2 py-2 text-xs md:text-sm text-gray-900">
+                <td className="px-2 py-2 text-xs md:text-sm text-gray-900 text-center">
                   <div className="flex items-center justify-center">
-                    <div className={`${!expandedReasons[record.id] ? 'line-clamp-2' : ''} max-w-[200px]`}>
+                    <div className={`${!expandedReasons[record.id] ? 'line-clamp-1' : ''} max-w-[140px]`}>
                       {record.reason}
                     </div>
-                    {record.reason && record.reason.length > 50 && (
+                    {record.reason && record.reason.length > 30 && (
                       <button 
                         onClick={() => toggleReasonExpansion(record.id)}
                         className="ml-1 text-green-600 hover:text-green-800"
@@ -163,7 +163,7 @@ const Logs: React.FC<LogsProps> = ({ borrowRecords, onEdit, onDelete, onUpdateSt
                     </button>
                     <button
                       onClick={() => onDelete(record.id)}
-                      className="text-red-500 transition-colors"
+                      className="text-red-500 hover:text-red-700 transition-colors"
                     >
                       <MdDelete size={18} />
                     </button>
